@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Money\Money;
+use Illuminate\Database\Eloquent\Model;
+use Money\MoneyCast;
 
 class Product extends Model
 {
