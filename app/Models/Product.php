@@ -6,6 +6,8 @@ use Money\Money;
 
 class Product extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = 'cod';
     protected $fillable = ['nome', 'valor', 'estoque', 'cidade_id'];
 
