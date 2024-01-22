@@ -14,7 +14,7 @@ class CidadeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'nome' => $this->faker->city
         ];
     }
 }

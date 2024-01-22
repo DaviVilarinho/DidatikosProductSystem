@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Money\MoneyCast;
 
 class Product extends Model
 {
@@ -19,7 +18,7 @@ class Product extends Model
     }
 
     protected $casts = [
-        'valor' => MoneyCast::class,
+        'valor' => 'float',
         'estoque' => 'integer',
     ];
 }

@@ -14,10 +14,16 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->id('cod');
+            $table->string('nome');
+            $table->integer('estoque');
+            $table->decimal('valor', 15, 2);
             $table->timestamps();
+            $table->unsignedBigInteger('cidade_id');
+            $table->foreign('cidade_id')->references('id')->on('cidades');
         });
     }
+    protected $fillable = ['nome', 'valor', 'estoque', 'cidade_id'];
 
     /**
      * Reverse the migrations.
