@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -28,20 +29,23 @@ class ProductController extends Controller
 
     public function post(Request $request)
     {
-        $requestProduct = $request->all();
-        if (is_null($requestProduct)) {
-            return response()->json(['message' => 'Produto inválido'], 400);
+        $validator = Validator::make($request->all(), [
+            'nome' => 'required|string',
+            'valor' => 'required|numeric',
+            'estoque' => 'required|integer',
+            'cidade_id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
-        $product = Product::firstOrNew(['cod' => $requestProduct['cod']]);
+        try {
+            $product = Product::create($request->all());
 
-        if ($product->exists) {
-            return response()->json(['message' => 'Produto já existente'], 400);
-        } else {
-            $product->fill($requestProduct);
-            $product['cod'] = $requestProduct['cod'];
-            $product->save();
             return response()->json(['message' => 'Produto criado com sucesso'], 201);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Produto inválido'], 400);
         }
     }
 
