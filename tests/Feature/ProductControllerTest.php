@@ -15,18 +15,18 @@ class ProductControllerTest extends TestCase
     $this->EXISTANT_CITY_ID = $cidade->id;
   }
 
-  public function testCriarProductsNovos()
+  public function testCreateNewProducts()
   {
-    $requestProduto = ['nome' => 'Produto 1', 'valor' => 10.00, 'estoque' => 10, 'cidade_id' => $this->EXISTANT_CITY_ID];
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct = ['nome' => 'Produto 1', 'valor' => 10.00, 'estoque' => 10, 'cidade_id' => $this->EXISTANT_CITY_ID];
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
 
-    $requestProduto['nome'] = "outra coisa mas id mesmo";
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct['nome'] = "outra coisa";
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
   }
 
-  public function testNaoCriarProductsInvalidosCidade()
+  public function testDoNotCreateInvalidCities()
   {
     $requestProduto = [
       'cod' => 100,
@@ -42,9 +42,9 @@ class ProductControllerTest extends TestCase
     $response->assertStatus(400);
   }
 
-  public function testNaoCriarProductsInvalidosValor()
+  public function testDoNotCreateInvalidFieldsExceptCity()
   {
-    $requestProduto = [
+    $requestProduct = [
       'cod' => 100,
       'nome' => 'Produto 1',
       'valor' => 10.00,
@@ -52,54 +52,47 @@ class ProductControllerTest extends TestCase
       'cidade_id' => $this->EXISTANT_CITY_ID
     ];
 
-    $requestProduto['valor'] = 'valor invalido';
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct['valor'] = 'valor invalido';
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(400);
-    $requestProduto['valor'] = null;
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct['valor'] = null;
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(400);
-  }
+    $requestProduct['valor'] = 40;
 
-  public function testNaoCriarProductsInvalidosEstoque()
-  {
-    $requestProduto = [
-      'cod' => 100,
-      'nome' => 'Produto 1',
-      'valor' => 10.00,
-      'estoque' => 10,
-      'cidade_id' => $this->EXISTANT_CITY_ID
-    ];
+    $requestProduct['estoque'] = 'estoque invalido';
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(400);
+    $requestProduct['estoque'] = null;
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(400);
+    $requestProduct['estoque'] = 40;
 
-    $requestProduto['estoque'] = 'estoque invalido';
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct['nome'] = 1;
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(400);
-    $requestProduto['estoque'] = null;
-    $response = $this->post('/api/products', $requestProduto);
+    $requestProduct['nome'] = null;
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(400);
-  }
+    $requestProduct['nome'] = 'valido';
 
-  public function testNaoCriarProductsInvalidosNome()
-  {
-    $requestProduto['nome'] = 1;
-    $response = $this->post('/api/products', $requestProduto);
-    $response->assertStatus(400);
-    $requestProduto['nome'] = null;
-    $response = $this->post('/api/products', $requestProduto);
-    $response->assertStatus(400);
-  }
-  public function testNaoDarOverrideSeUserDerCod()
-  {
-    $requestProduto = [
-      'cod' => 100,
-      'nome' => 'Produto 1',
-      'valor' => 10.00,
-      'estoque' => 10,
-      'cidade_id' => $this->EXISTANT_CITY_ID
-    ];
-
-    $response = $this->post('/api/products', $requestProduto);
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
-    $response = $this->post('/api/products', $requestProduto);
+  }
+
+  public function testDoNotCreateDuplicatesOrOverride()
+  {
+    $requestProduct = [
+      'cod' => 100,
+      'nome' => 'Produto 1',
+      'valor' => 10.00,
+      'estoque' => 10,
+      'cidade_id' => $this->EXISTANT_CITY_ID
+    ];
+
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(201);
+    $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
     $this->assertCount(2, Cidade::find($this->EXISTANT_CITY_ID)->products);
   }
