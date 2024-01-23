@@ -2,6 +2,7 @@
 namespace Tests\Feature;
 
 use App\Models\Cidade;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
@@ -24,6 +25,23 @@ class ProductControllerTest extends TestCase
     $requestProduct['nome'] = "outra coisa";
     $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
+  }
+
+  public function testGetProducts()
+  {
+    $response = $this->get('/api/products');
+    $response->assertStatus(404);
+
+    $requestProduct = ['nome' => 'Produto 1', 'valor' => 10.00, 'estoque' => 10, 'cidade_id' => $this->EXISTANT_CITY_ID];
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(201);
+    $cod = $response->decodeResponseJson()['cod'];
+
+    $response = $this->get('/api/products');
+    $response->assertStatus(200);
+    $response->assertJsonCount(1);
+    $response = $this->get("/api/products/$cod");
+    $response->assertStatus(200);
   }
 
   public function testDoNotCreateInvalidCities()
@@ -95,5 +113,74 @@ class ProductControllerTest extends TestCase
     $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
     $this->assertCount(2, Cidade::find($this->EXISTANT_CITY_ID)->products);
+  }
+
+  public function testDeleteOnlyExistantProducts()
+  {
+    $requestProduct = [
+      'nome' => 'Produto 1',
+      'valor' => 10.00,
+      'estoque' => 10,
+      'cidade_id' => $this->EXISTANT_CITY_ID
+    ];
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(201);
+    $requestProduct = $response->decodeResponseJson();
+
+    $this->assertCount(1, Cidade::find($this->EXISTANT_CITY_ID)->products);
+
+    $deleteCode = $requestProduct['cod'];
+    $response = $this->delete("/api/products/$deleteCode");
+    $response->assertStatus(200);
+
+    $this->assertCount(0, Cidade::find($this->EXISTANT_CITY_ID)->products);
+
+    $response = $this->delete("/api/products/$deleteCode");
+    $response->assertStatus(400);
+  }
+
+  public function testUpdateOnlyExistantProducts()
+  {
+    $requestProduct = [
+      'nome' => 'Produto 1',
+      'valor' => 10.00,
+      'estoque' => 10,
+      'cidade_id' => $this->EXISTANT_CITY_ID
+    ];
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(201);
+    $requestProduct = $response->decodeResponseJson();
+
+    $this->assertCount(1, Cidade::find($this->EXISTANT_CITY_ID)->products);
+
+    $updateCode = $requestProduct['cod'];
+    $requestProduct['nome'] = 'um nome diferente';
+    $response = $this->put("/api/products/$updateCode", [$requestProduct]);
+    $response->assertStatus(200);
+
+    $this->assertCount(1, Cidade::find($this->EXISTANT_CITY_ID)->products);
+
+    $updateCode = 0;
+    $response = $this->put("/api/products/$updateCode", [$requestProduct]);
+    $response->assertStatus(404);
+  }
+
+  public function testUpdateOnlyValidCities()
+  {
+    $requestProduct = [
+      'nome' => 'Produto 1',
+      'valor' => 10.00,
+      'estoque' => 10,
+      'cidade_id' => $this->EXISTANT_CITY_ID
+    ];
+    $response = $this->post('/api/products', $requestProduct);
+    $response->assertStatus(201);
+    $response = $response->decodeResponseJson();
+
+    $updateCode = $response['cod'];
+    $requestProduct['cod'] = $updateCode;
+    $requestProduct['cidade_id'] = $this->EXISTANT_CITY_ID + 1;
+    $response = $this->put("/api/products/$updateCode", $requestProduct);
+    $response->assertStatus(400);
   }
 }

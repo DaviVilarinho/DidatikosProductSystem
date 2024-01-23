@@ -27,53 +27,43 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+
     public function post(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nome' => 'required|string',
-            'valor' => 'required|numeric',
-            'estoque' => 'required|integer',
-            'cidade_id' => 'required|integer'
-        ]);
+        $validator = Validator::make($request->all(), Product::$createRules);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        try {
-            $product = Product::create($request->all());
+        $product = Product::create($request->all());
 
-            return response()->json(['message' => 'Produto criado com sucesso'], 201);
-        } catch (QueryException $e) {
-            return response()->json(['message' => 'Produto inválido'], 400);
-        }
+        return response()->json($product, 201);
     }
 
-    public function putById($request, $id)
+    public function putById(Request $request, $id)
     {
-        try {
-            $product = Product::find($id);
-            if (is_null($product)) {
-                return response()->json(['message' => 'Produto não encontrado'], 404);
-            }
-            $product->update($request->all());
-            return response()->json(['message' => 'Atualizado com sucesso'], 200);
-        } catch (QueryException $e) {
-            return response()->json(['message' => 'Erro ao atualizar o produto'], 400);
+        $validator = Validator::make($request->all(), Product::$updateRules);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
+
+        $product = Product::find($id);
+        if (is_null($product)) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
+        }
+        $product->update($validator->validated());
+        return response()->json(['message' => 'Atualizado com sucesso'], 200);
     }
 
     public function deleteById($id)
     {
-        try {
-            $product = Product::find($id);
-            if (is_null($product)) {
-                return response()->json(['message' => 'Produto não encontrado'], 400);
-            }
-            $product->delete();
-            return response()->json(['message' => 'Produto removido com sucesso'], 200);
-        } catch (QueryException $e) {
-            return response()->json(['message' => 'Erro ao remover o produto'], 400);
+        $product = Product::find($id);
+        if (is_null($product)) {
+            return response()->json(['message' => 'Produto não encontrado'], 400);
         }
+        $product->delete();
+        return response()->json(['message' => 'Produto removido com sucesso'], 200);
     }
 }
