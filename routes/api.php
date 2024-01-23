@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/cidades', [CidadeController::class, 'get']);
 
 Route::get('/products', [ProductController::class, 'get']);
-Route::get('/products/{id}', [ProductController::class, 'getById']);
 Route::post('/products', [ProductController::class, 'post']);
+Route::get('/products/{id}', [ProductController::class, 'getById']);
 Route::put('/products/{id}', [ProductController::class, 'putById']);
 Route::delete('/products/{id}', [ProductController::class, 'deleteById']);

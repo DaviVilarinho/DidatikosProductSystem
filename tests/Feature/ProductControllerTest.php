@@ -25,6 +25,8 @@ class ProductControllerTest extends TestCase
     $requestProduct['nome'] = "outra coisa";
     $response = $this->post('/api/products', $requestProduct);
     $response->assertStatus(201);
+
+    $this->assertCount(2, Cidade::find($this->EXISTENT_CITY_ID)->products);
   }
 
   public function testGetProducts()

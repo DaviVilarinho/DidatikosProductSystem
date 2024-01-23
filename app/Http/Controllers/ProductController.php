@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,7 +35,7 @@ class ProductController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $product = Product::create($request->all());
+        $product = Product::create($validator->validated());
 
         return response()->json($product, 201);
     }
