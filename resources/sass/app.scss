@@ -6,3 +6,9 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.navbar-expand {
+  .navbar-collapse {
+    justify-content: space-between;
+  }
+}
