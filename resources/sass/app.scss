@@ -19,6 +19,7 @@
 
 .content {
   margin: 2em;
+  margin-top: 3%;
 }
 
 .badge-warning {
@@ -26,4 +27,23 @@
   font-weight: bolder;
   font-stretch: condensed;
   font-size: small;
+}
+
+$mini-form-padding: 7em;
+
+.mini-form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  padding-right: $mini-form-padding;
+  padding-left: $mini-form-padding;
+}
+
+.city-selection {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23ccc" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right .75rem center;
+  background-size: 8px 10px;
+  padding-right: 1.75rem;
 }

@@ -4,5 +4,5 @@
 
 @section('content')
     <h1>Todos Produtos</h1>
-    <product-list style="margin-top: 3%"></product-list>
+    <product-list></product-list>
 @endsection

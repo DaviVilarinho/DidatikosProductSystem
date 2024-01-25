@@ -30,8 +30,16 @@ const app = new Vue({
     data: {
         cities: [],
         citiesById: {},
+        citiesIdByNome: {},
+        API_ROUTE: '',
+        PRODUCT_API_ROUTE: '',
+        CIDADE_API_ROUTE: '',
     },
     mounted() {
+        this.API_ROUTE = '/api';
+        this.PRODUCT_API_ROUTE = this.API_ROUTE + '/products';
+        this.CIDADE_API_ROUTE = this.API_ROUTE + '/cidade';
+
         if (localStorage.getItem('cities')) {
             this.cities = JSON.parse(localStorage.getItem('cities'));
         } else {
@@ -49,6 +57,17 @@ const app = new Vue({
             }, {});
 
             localStorage.setItem('citiesById', JSON.stringify(this.citiesById));
+        }
+
+        if (localStorage.getItem('citiesIdByNome')) {
+            this.citiesIdByNome = JSON.parse(localStorage.getItem('citiesIdByNome'));
+        } else {
+            this.citiesIdByNome = this.cities.reduce((obj, city) => {
+                obj[city.nome] = city.id;
+                return obj;
+            }, {});
+
+            localStorage.setItem('citiesIdByNome', JSON.stringify(this.citiesIdByNome));
         }
     }
 });
