@@ -29,6 +29,7 @@ const app = new Vue({
     el: '#app',
     data: {
         cities: [],
+        citiesById: {},
     },
     mounted() {
         if (localStorage.getItem('cities')) {
@@ -37,6 +38,17 @@ const app = new Vue({
             this.cities = [{ id: '1', nome: 'São Paulo' }];
 
             localStorage.setItem('cities', JSON.stringify(this.cities));
+        }
+
+        if (localStorage.getItem('citiesById')) {
+            this.citiesById = JSON.parse(localStorage.getItem('citiesById'));
+        } else {
+            this.citiesById = this.cities.reduce((obj, city) => {
+                obj[city.id] = city.nome;
+                return obj;
+            }, {});
+
+            localStorage.setItem('citiesById', JSON.stringify(this.citiesById));
         }
     }
 });

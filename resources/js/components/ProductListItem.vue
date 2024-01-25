@@ -10,9 +10,12 @@
             currency
         }, product).format(product.valor) }} </p>
       </div>
-      <div class="col-sm">
-        <p class="card-text">{{ product.estoque }} em {{ cities?.find(city => city.id ===
-          product.cidade_id)?.nome ?? 'Localização Desconhecida' }} </p>
+      <div v-if="product.estoque > 0" class="col-sm">
+        <p class="card-text">{{ product.estoque }} em {{ citiesById[product?.cidade_id] ?? 'Local Indefinido' }} </p>
+      </div>
+      <div v-else class="col-sm">
+        <span class="badge badge-warning">Indisponível em {{ citiesById[product?.cidade_id] ?? 'Local Indefinido'
+        }}</span>
       </div>
     </div>
   </div>
@@ -24,12 +27,6 @@ export default {
     product: {
       type: Object,
       required: true,
-      default: () => ({
-        nome: '',
-        valor: 0,
-        cidade_id: '',
-        estoque: 0
-      })
     },
     lang: {
       type: String,
@@ -41,10 +38,10 @@ export default {
       required: false,
       default: 'BRL'
     },
-    cities: {
-      type: Array,
+    citiesById: {
+      type: JSON,
       required: false,
-      default: () => JSON.parse(localStorage.cities)
+      default: () => JSON.parse(localStorage.getItem('citiesById'))
     }
   }
 }
