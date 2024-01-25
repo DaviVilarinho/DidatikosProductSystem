@@ -57,6 +57,20 @@ export default {
       type: JSON,
       required: false,
       default: () => JSON.parse(localStorage.getItem('citiesIdByNome'))
+    },
+    idSearch: {
+      type: Number,
+      required: false
+    }
+  },
+  created() {
+    if (this.idSearch && this.isEditing) {
+      axios.get(`${this.PRODUCT_API_ROUTE}/${this.idSearch}`)
+        .then(response => {
+          this.product = response.data;
+        }).catch(error => {
+          this.errors = error?.response?.data?.errors ?? 'Erro Inesperado';
+        });
     }
   },
   methods: {

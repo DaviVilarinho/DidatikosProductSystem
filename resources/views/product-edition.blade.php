@@ -3,5 +3,5 @@
 @section('title', 'Editar Produto')
 
 @section('content')
-    <product-form :isEdition="true"></product-form>
+    <product-form :isEdition="true" :idSearch="{{ request()->route('id') }}"></product-form>
 @endsection

@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const { default: axios } = require('axios');
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -38,36 +40,28 @@ const app = new Vue({
     mounted() {
         this.API_ROUTE = '/api';
         this.PRODUCT_API_ROUTE = this.API_ROUTE + '/products';
-        this.CIDADE_API_ROUTE = this.API_ROUTE + '/cidade';
+        this.CIDADE_API_ROUTE = this.API_ROUTE + '/cidades';
 
         if (localStorage.getItem('cities')) {
             this.cities = JSON.parse(localStorage.getItem('cities'));
         } else {
-            this.cities = [{ id: '1', nome: 'São Paulo' }];
+            axios.get(this.CIDADE_API_ROUTE).then(response => {
+                this.cities = response.data;
+                localStorage.setItem('cities', JSON.stringify(this.cities));
 
-            localStorage.setItem('cities', JSON.stringify(this.cities));
-        }
+                this.citiesById = this.cities.reduce((obj, city) => {
+                    obj[city.id] = city.nome;
+                    return obj;
+                }, {});
+                localStorage.setItem('citiesById', JSON.stringify(this.citiesById));
 
-        if (localStorage.getItem('citiesById')) {
-            this.citiesById = JSON.parse(localStorage.getItem('citiesById'));
-        } else {
-            this.citiesById = this.cities.reduce((obj, city) => {
-                obj[city.id] = city.nome;
-                return obj;
-            }, {});
+                this.citiesIdByNome = this.cities.reduce((obj, city) => {
+                    obj[city.nome] = city.id;
+                    return obj;
+                }, {});
+                localStorage.setItem('citiesIdByNome', JSON.stringify(this.citiesIdByNome));
+            });
 
-            localStorage.setItem('citiesById', JSON.stringify(this.citiesById));
-        }
-
-        if (localStorage.getItem('citiesIdByNome')) {
-            this.citiesIdByNome = JSON.parse(localStorage.getItem('citiesIdByNome'));
-        } else {
-            this.citiesIdByNome = this.cities.reduce((obj, city) => {
-                obj[city.nome] = city.id;
-                return obj;
-            }, {});
-
-            localStorage.setItem('citiesIdByNome', JSON.stringify(this.citiesIdByNome));
         }
     }
 });
