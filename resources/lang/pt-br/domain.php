@@ -3,7 +3,8 @@
 return [
 
   'website_name' => 'ProdutoDidatikos',
-  'product_navbar' => 'Produtos'
+  'product_navbar' => 'Produtos',
+  'currency' => 'R$',
 
 ];
 

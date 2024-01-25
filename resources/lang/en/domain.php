@@ -3,7 +3,8 @@
 return [
 
   'website_name' => 'Productland',
-  'product_navbar' => 'Products'
+  'product_navbar' => 'Products',
+  'currency' => '$',
 
 ];
 

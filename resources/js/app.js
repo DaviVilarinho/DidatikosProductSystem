@@ -27,4 +27,16 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 const app = new Vue({
     el: '#app',
+    data: {
+        cities: [],
+    },
+    mounted() {
+        if (localStorage.getItem('cities')) {
+            this.cities = JSON.parse(localStorage.getItem('cities'));
+        } else {
+            this.cities = [{ id: '1', nome: 'São Paulo' }];
+
+            localStorage.setItem('cities', JSON.stringify(this.cities));
+        }
+    }
 });
