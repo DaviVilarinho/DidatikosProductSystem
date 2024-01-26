@@ -47,3 +47,5 @@ OBS: senhas não deveriam estar commitadas, nem o .env
 `php artisan serve`
 
 `npm run dev` para compilar
+
+`php artisan migrate:fresh` para registrar migrações

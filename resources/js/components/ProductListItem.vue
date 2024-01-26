@@ -20,6 +20,9 @@
       <div class="col-sm">
         <a :href="`/products/${product.cod}`" class="btn btn-primary">Editar</a>
       </div>
+      <div class="col-sm">
+        <button @click="deleteProduct" type="submit" class="btn btn-primary" style="align-items: right;">Deletar</button>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +48,17 @@ export default {
       type: JSON,
       required: false,
       default: () => JSON.parse(localStorage.getItem('citiesById'))
+    }
+  },
+  methods: {
+    deleteProduct() {
+      axios.delete(`/api/products/${this.product.cod}`)
+        .then(response => {
+          alert(`Produto ${this.product.nome} deletado com sucesso!`);
+          window.location.reload();
+        }).catch(error => {
+          alert(`Erro ao deletar produto! ${error?.response?.data?.errors}`);
+        });
     }
   }
 }

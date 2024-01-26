@@ -20,7 +20,11 @@ export default {
     axios.get("/api/products").then(response => {
       this.products = response.data;
     }).catch(error => {
-      alert(`Erro ao carregar produtos! ${error?.response?.data?.errors}`);
+      if (error?.response?.status === 404) {
+        this.products = [];
+      } else {
+        alert(`Erro ao carregar produtos! ${error?.response?.data?.errors}`);
+      }
     });
   }
 }
