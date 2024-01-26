@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cidade;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        Cidade::factory(10)->create();
+
+        $cidades = [Cidade::factory()->create(), Cidade::factory()->create()];
+        for ($i = 0; $i < 5; $i++) {
+            Product::factory()->create(['cidade_id' => $cidades[$i % 2]->id]);
+        }
     }
 }

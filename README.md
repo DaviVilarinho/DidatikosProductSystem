@@ -49,3 +49,5 @@ OBS: senhas não deveriam estar commitadas, nem o .env
 `npm run dev` para compilar
 
 `php artisan migrate:fresh` para registrar migrações
+
+`php artisan db:seed` para colocar cidades principalmente
