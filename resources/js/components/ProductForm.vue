@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
   props: {
     product: {
@@ -60,7 +59,7 @@ export default {
   },
   created() {
     if (this.idSearch !== undefined && this.isEditing) {
-      axios.get(`${this.PRODUCT_API_ROUTE}/${this.idSearch}`)
+      axios.get(`/api/products/${this.idSearch}`)
         .then(response => {
           this.product = response.data;
         }).catch(error => {
@@ -73,23 +72,19 @@ export default {
       this.product.cidade_id = parseInt(this.product.cidade_id);
       this.product.estoque = parseInt(this.product.estoque);
       this.product.valor = parseFloat(this.product.valor);
-      if (this.isEditing) {
-        axios.put(`${this.PRODUCT_API_ROUTE}/${this.product.cod}`, this.product).then(response => {
-          console.log(JSON.stringify(response));
-        }).catch(error => {
-          console.log(JSON.stringify(error));
-        });
-      } else {
-        axios({
-          method: 'post',
-          url: this.PRODUCT_API_ROUTE,
-          data: this.product,
-        }).then(response => {
-          console.log('response' + JSON.stringify(response));
-        }).catch(error => {
-          console.log('error' + JSON.stringify(error));
-        });
+      if (this.idSearch !== undefined) {
+        this.product.cod = parseInt(this.idSearch);
       }
+      let axiosConfig = {
+        method: this.isEdition ? 'put' : 'post',
+        url: `/api/products${this.isEdition ? `/${this.product.cod}` : ''}`,
+        data: this.product,
+      }
+      axios(axiosConfig).then(_ => {
+        alert("Operação realizada com sucesso!");
+      }).catch(error => {
+        alert(error?.response?.data?.errors ?? 'Erro Inesperado');
+      });
     }
   }
 };

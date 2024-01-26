@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     search() {
-      console.log(`Buscando ${this.searchTerm}...`);
+      console.log(`Buscando ${this.searchTerm}...`); // não consegui implementar...
     }
   }
 };
