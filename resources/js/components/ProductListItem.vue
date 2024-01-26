@@ -21,7 +21,7 @@
         <a :href="`/products/${product.cod}`" class="btn btn-primary">Editar</a>
       </div>
       <div class="col-sm">
-        <button @click="deleteProduct" type="submit" class="btn btn-primary" style="align-items: right;">Deletar</button>
+        <button @click="deleteProduct" type="submit" class="btn btn-danger">Deletar</button>
       </div>
     </div>
   </div>

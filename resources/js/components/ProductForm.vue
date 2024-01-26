@@ -27,6 +27,7 @@
       </select>
     </div>
     <button @click="submitForm" type="submit" class="btn btn-primary mt-3" style="align-items: right;">Enviar</button>
+    <button v-if="isEdition" @click="deleteProduct" type="submit" class="btn btn-danger mt-3">Deletar</button>
   </div>
 </template>
 
@@ -82,9 +83,21 @@ export default {
       }
       axios(axiosConfig).then(_ => {
         alert("Operação realizada com sucesso!");
+        window.location.replace('/');
       }).catch(error => {
         alert(error?.response?.data?.errors ?? 'Erro Inesperado');
       });
+    },
+    deleteProduct() {
+      axios({
+        method: 'delete', url: `/api/products/${this.idSearch}`
+      })
+        .then(response => {
+          alert(`Produto de código ${this.idSearch} deletado com sucesso!`);
+          window.location.replace('/');
+        }).catch(error => {
+          alert(`Erro ao deletar produto! ${error?.response?.data?.errors}`);
+        });
     }
   }
 };
