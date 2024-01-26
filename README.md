@@ -42,4 +42,8 @@ A data limite de entrega do projeto será de 7 dias a partir do recebimento do t
 Para lançar o banco de dados mysql
 
 `docker run --name didatikos-mysql -e MYSQL_ROOT_PASSWORD=devdidatikos -e MYSQL_DATABASE=laravel -p 33060:3306 --rm mysql:8.3`
-OBS: senhas não deveriam estar commitadas
+OBS: senhas não deveriam estar commitadas, nem o .env
+
+`php artisan serve`
+
+`npm run dev` para compilar
