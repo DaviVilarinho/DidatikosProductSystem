@@ -13,8 +13,6 @@
             <nav class="navbar navbar-expand-lg navbar-expand">
                 <div class="collapse navbar-collapse " id="navbarNav">
                     <a class="navbar-brand" href="/">{{ __('domain.website_name') }}</a>
-
-                    <search-products></search-products>
                 </div>
             </nav>
         @show
