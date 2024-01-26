@@ -3,5 +3,5 @@
 @section('title', 'Novo Produto')
 
 @section('content')
-    <product-form :isEdition="false"></product-form>
+    <product-form :is-edition="false"></product-form>
 @endsection

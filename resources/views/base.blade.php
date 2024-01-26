@@ -15,12 +15,6 @@
                     <a class="navbar-brand" href="/">{{ __('domain.website_name') }}</a>
 
                     <search-products></search-products>
-
-                    <ul class="navbar-nav justify-content-around">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/products">{{ __('domain.product_navbar') }}</a>
-                        </li>
-                    </ul>
                 </div>
             </nav>
         @show

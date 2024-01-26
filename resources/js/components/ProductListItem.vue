@@ -17,6 +17,9 @@
         <span class="badge badge-warning">Indisponível em {{ citiesById[product?.cidade_id] ?? 'Local Indefinido'
         }}</span>
       </div>
+      <div class="col-sm">
+        <a :href="`/products/${product.cod}`" class="btn btn-primary">Editar</a>
+      </div>
     </div>
   </div>
 </template>

@@ -33,19 +33,13 @@ const app = new Vue({
         cities: [],
         citiesById: {},
         citiesIdByNome: {},
-        API_ROUTE: '',
-        PRODUCT_API_ROUTE: '',
-        CIDADE_API_ROUTE: '',
     },
     mounted() {
-        this.API_ROUTE = '/api';
-        this.PRODUCT_API_ROUTE = this.API_ROUTE + '/products';
-        this.CIDADE_API_ROUTE = this.API_ROUTE + '/cidades';
 
         if (localStorage.getItem('cities')) {
             this.cities = JSON.parse(localStorage.getItem('cities'));
         } else {
-            axios.get(this.CIDADE_API_ROUTE).then(response => {
+            axios.get("/api/cidades").then(response => {
                 this.cities = response.data;
                 localStorage.setItem('cities', JSON.stringify(this.cities));
 

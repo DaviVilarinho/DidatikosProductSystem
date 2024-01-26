@@ -3,6 +3,9 @@
     <div v-for="product in products" :key="product['cod']" class="card-body">
       <product-list-item :product="product"></product-list-item>
     </div>
+    <div class="card-body" style="display: flex; justify-content: center; width: 50%; margin: auto;">
+      <a href="/products-new" class="btn btn-primary">Novo Produto</a>
+    </div>
   </div>
 </template>
 
@@ -14,31 +17,11 @@ export default {
     };
   },
   created() {
-    this.products = [{
-      cod: '1',
-      nome: 'Produto 1',
-      valor: 10.0,
-      estoque: 11,
-      cidade_id: '1'
-    }, {
-      cod: '2',
-      nome: 'Produto 2',
-      valor: 20.0,
-      estoque: 22,
-      cidade_id: '1'
-    }, {
-      cod: '4',
-      nome: 'Produto 4 Que Acabou',
-      valor: 20.0,
-      estoque: 0,
-      cidade_id: '1'
-    }, {
-      cod: '3',
-      nome: 'Produto 3',
-      valor: 30.0,
-      estoque: 33,
-      cidade_id: '1'
-    }];
+    axios.get("/api/products").then(response => {
+      this.products = response.data;
+    }).catch(error => {
+      console.log(JSON.stringify(error));
+    });
   }
 }
 </script>
